@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_pressed="true">
+        <layer-list>
+            <item android:left="2dp" android:top="2dp">
+                <shape>
+                    <solid android:color="#666666" />
+                    <corners
+                        android:bottomLeftRadius="0dp"
+                        android:topLeftRadius="0dp"
+                        android:bottomRightRadius="25dp"
+                        android:topRightRadius="25dp">
+                    </corners>
+                </shape>
+            </item>
+            <!-- White foreground. -->
+            <item android:bottom="2dp" android:right="2dp">
+                <shape>
+                    <solid android:color="#e9cf82" />
+                    <corners
+                        android:bottomLeftRadius="0dp"
+                        android:topLeftRadius="0dp"
+                        android:bottomRightRadius="25dp"
+                        android:topRightRadius="25dp">
+                    </corners>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+    <item android:state_selected="true">
+        <layer-list>
+            <item android:left="2dp" android:top="2dp">
+                <shape>
+                    <solid android:color="#666666" />
+                    <corners
+                        android:bottomLeftRadius="0dp"
+                        android:topLeftRadius="0dp"
+                        android:bottomRightRadius="25dp"
+                        android:topRightRadius="25dp">
+                    </corners>
+                </shape>
+            </item>
+            <!-- White foreground. -->
+            <item android:bottom="2dp" android:right="2dp">
+                <shape>
+                    <solid android:color="#fae093" />
+                    <corners
+                        android:bottomLeftRadius="0dp"
+                        android:topLeftRadius="0dp"
+                        android:bottomRightRadius="25dp"
+                        android:topRightRadius="25dp">
+                    </corners>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+    <item>
+        <layer-list>
+            <item android:left="2dp" android:top="2dp">
+                <shape>
+                    <solid android:color="#666666" />
+                    <corners
+                        android:bottomLeftRadius="0dp"
+                        android:topLeftRadius="0dp"
+                        android:bottomRightRadius="25dp"
+                        android:topRightRadius="25dp">
+                    </corners>
+                </shape>
+            </item>
+            <!-- White foreground. -->
+            <item android:bottom="2dp" android:right="2dp">
+                <shape>
+                    <solid android:color="#FFFFFF" />
+                    <corners
+                        android:bottomLeftRadius="0dp"
+                        android:topLeftRadius="0dp"
+                        android:bottomRightRadius="25dp"
+                        android:topRightRadius="25dp">
+                    </corners>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+</selector>

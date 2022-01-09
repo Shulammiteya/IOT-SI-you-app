@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinnerValue">
+        <item>使用者</item>
+        <item>醫生或家屬</item>
+    </string-array>
+</resources>

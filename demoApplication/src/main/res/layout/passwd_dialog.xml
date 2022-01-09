@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="20sp" >
+        <TextView
+            android:layout_width="175sp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40sp"
+            android:text="舊密碼" />
+        <EditText
+            android:id="@+id/old_passwd"
+            android:textColor="#818181"
+            android:layout_width="match_parent"
+            android:layout_height="45sp"
+            android:layout_marginBottom="22sp"
+            android:layout_marginTop="10sp"
+            android:background="@drawable/edit_text"
+            android:inputType="textPassword" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="新密碼" />
+        <EditText
+            android:id="@+id/new_passwd"
+            android:textColor="#818181"
+            android:layout_width="match_parent"
+            android:layout_height="45sp"
+            android:layout_marginBottom="22sp"
+            android:layout_marginTop="10sp"
+            android:background="@drawable/edit_text"
+            android:inputType="textPassword" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="確認新密碼" />
+        <EditText
+            android:id="@+id/confirm_passwd"
+            android:textColor="#818181"
+            android:layout_width="match_parent"
+            android:layout_height="45sp"
+            android:layout_marginBottom="40sp"
+            android:layout_marginTop="10sp"
+            android:background="@drawable/edit_text"
+            android:inputType="textPassword" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

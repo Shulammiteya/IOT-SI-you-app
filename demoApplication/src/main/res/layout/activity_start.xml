@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StartActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidline_top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.24" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidline_left"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.41" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidline_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidline_right"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.81" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gifImageView_background3"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="@drawable/background_3" />
+    <ImageView
+        android:id="@+id/imageView_login"
+        android:src="@drawable/login"
+        android:scaleType="fitXY"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+    <ImageView
+        android:id="@+id/imageView_register"
+        android:src="@drawable/register"
+        android:scaleType="fitXY"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+
+    <Button
+        android:id="@+id/btn_login_page"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sidebtn"
+        android:text="登入"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="@id/guidline_top"
+        app:layout_constraintBottom_toBottomOf="@id/guidline_bottom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintVertical_bias="0.215" />
+    <Button
+        android:id="@+id/btn_register_page"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sidebtn"
+        android:text="註冊"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="@id/guidline_top"
+        app:layout_constraintBottom_toBottomOf="@id/guidline_bottom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintVertical_bias="0.81" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="@id/guidline_top"
+        app:layout_constraintBottom_toBottomOf="@id/guidline_bottom"
+        app:layout_constraintLeft_toLeftOf="@id/guidline_left"
+        app:layout_constraintRight_toRightOf="@id/guidline_right" >
+        <TextView
+            android:layout_width="175sp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15sp"
+            android:text="名字" />
+        <EditText
+            android:id="@+id/editText_name"
+            android:textColor="#818181"
+            android:layout_width="match_parent"
+            android:layout_height="45sp"
+            android:layout_marginBottom="22sp"
+            android:layout_marginTop="10sp"
+            android:background="@drawable/edit_text"
+            android:inputType="textPersonName" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="密碼" />
+        <EditText
+            android:id="@+id/editText_passwd"
+            android:textColor="#818181"
+            android:layout_width="match_parent"
+            android:layout_height="45sp"
+            android:layout_marginBottom="22sp"
+            android:layout_marginTop="10sp"
+            android:background="@drawable/edit_text"
+            android:inputType="textPassword" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="身分" />
+        <Spinner
+            android:id="@+id/sp"
+            android:entries="@array/spinnerValue"
+            android:layout_width="match_parent"
+            android:layout_height="45sp"
+            android:layout_marginBottom="25sp"
+            android:layout_marginTop="10sp"
+            android:background="#efefef"
+            android:alpha="0.66" />
+        <Button
+            android:id="@+id/btn_enter"
+            android:layout_width="70sp"
+            android:layout_height="wrap_content"
+            android:text="登入"
+            android:background="@drawable/enterbtn"
+            android:layout_marginBottom="5sp"
+            android:layout_gravity="end" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView_background2"
+        android:src="@drawable/background_2"
+        android:scaleType="fitXY"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:elevation="2sp" />
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gifImageView_background1"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="@drawable/background_1"
+        android:elevation="2sp" />
+    <TextView
+        android:id="@+id/textView_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="歡迎！"
+        android:textSize="35sp"
+        android:alpha="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35"
+        android:elevation="2sp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

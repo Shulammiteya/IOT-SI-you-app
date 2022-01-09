@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MenuActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidline_top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidline_left"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidline_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidline_right"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gifImageView_background4"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="@drawable/background_4" />
+
+    <Button
+        android:id="@+id/btn_setting"
+        android:layout_width="210sp"
+        android:layout_height="110sp"
+        android:background="@drawable/activitybtn"
+        android:text="設定"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="@id/guidline_top"
+        app:layout_constraintBottom_toBottomOf="@id/guidline_bottom"
+        app:layout_constraintStart_toStartOf="@id/guidline_left"
+        app:layout_constraintEnd_toEndOf="@id/guidline_right" />
+    <Button
+        android:id="@+id/btn_start"
+        android:layout_width="210sp"
+        android:layout_height="110sp"
+        android:background="@drawable/activitybtn"
+        android:text="開始"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="@id/guidline_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guidline_left"
+        app:layout_constraintEnd_toEndOf="@id/guidline_right"
+        app:layout_constraintVertical_bias="0.20" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
