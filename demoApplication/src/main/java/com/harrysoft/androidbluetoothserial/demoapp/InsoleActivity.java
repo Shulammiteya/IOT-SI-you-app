@@ -32,6 +32,7 @@ import com.harrysoft.androidbluetoothserial.BluetoothManager;
 import com.harrysoft.androidbluetoothserial.BluetoothSerialDevice;
 import com.harrysoft.androidbluetoothserial.SimpleBluetoothDeviceInterface;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class InsoleActivity extends AppCompatActivity {
     private String account, passwd, identity;
     final ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
 
-    Map<String,Object> leftDataDict, rightDataDict;
+    Map<Integer,Object> leftDataDict, rightDataDict;
 
     private SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS");
     private SimpleDateFormat formatter2 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -111,7 +112,6 @@ public class InsoleActivity extends AppCompatActivity {
     //heroku
     HerokuService herokuService;
 
-    private Button btn1, btn2;
     private BluetoothDevice BLEDevice = null;
     private BluetoothGatt connectedGatt = null;
     private final Handler BLEHandler = new Handler();
@@ -140,43 +140,9 @@ public class InsoleActivity extends AppCompatActivity {
                 .build();
         herokuService = retrofit.create(HerokuService.class);
 
-        Double arr1[] = new Double[3];
-        ArrayList<String> arr = new ArrayList<>();
-        arr1[0] = 10.0;
-        arr1[1] = 20.0;
-        arr1[2] = 30.0;
-        arr.add(Arrays.toString(arr1));
-        arr1[0] = 40.0;
-        arr1[1] = 50.0;
-        arr1[2] = 60.0;
-        arr.add(Arrays.toString(arr1));
-        arr1[0] = 70.0;
-        arr1[1] = 80.0;
-        arr1[2] = 90.0;
-        arr.add(Arrays.toString(arr1));
-
-        Call<ResponseBody> call = herokuService.test(arr);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.v("upload", "success");
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.v("upload error", t.getMessage());
-            }
-        });
-
         android.bluetooth.BluetoothManager BLEBluetoothManager = (android.bluetooth.BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         BLEDevice = BLEBluetoothManager.getAdapter().getRemoteDevice("1C:BA:8C:1D:31:80");
         connect();
-
-        btn1 = findViewById(R.id.btn1);
-        btn2 = findViewById(R.id.btn2);
-
-        btn1.setOnClickListener(v -> send("60\n"));
-        btn2.setOnClickListener(v -> send("s\n"));
     }
 
     @Override
@@ -203,6 +169,7 @@ public class InsoleActivity extends AppCompatActivity {
             connectedGatt.close();
         connectedGatt = null;
         Log.d("appendLog", "BlEDeviceActivity is closed");
+        toneGen1.stopTone();
 
         super.onStop();
     }
@@ -337,14 +304,15 @@ public class InsoleActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(stateL == 0) {
                     connectDevice(L_insole_mac);
-                    leftBtn.setText("開始偵測");
+                    leftDataDict.clear();
+                    rightDataDict.clear();
                 }
                 else if(stateL == 1) {
                     left_insole_device_interface.startInsole();
                     is_L_insole_started = true;
                     //startLeftBtn.setText("Stop Left");
                     leftBtn.setText("結束偵測");
-                    Toast.makeText(InsoleActivity.this, "Left Insole Started.", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(InsoleActivity.this, "Left Insole Started.", Toast.LENGTH_SHORT).show();
                 }
                 else if(stateL == 2) {
                     left_insole_device_interface.stopInsole();
@@ -352,12 +320,12 @@ public class InsoleActivity extends AppCompatActivity {
                     //startLeftBtn.setText("Start Left");
                     leftBtn.setText("斷開藍芽");
                     left_timer.cancel();
-                    Toast.makeText(InsoleActivity.this, "Left Insole Not Connected!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(InsoleActivity.this, "Left Insole Not Connected!", Toast.LENGTH_SHORT).show();
                 }
                 else if(stateL == 3) {
                     bluetoothManager.closeDevice(left_insole_device_interface);
                     is_L_insole_connected = false;
-                    Toast.makeText(InsoleActivity.this, "Left Insole Disconnected.", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(InsoleActivity.this, "Left Insole Disconnected.", Toast.LENGTH_SHORT).show();
                     leftBtn.setText("連線藍芽");
                 }
                 stateL++;
@@ -377,7 +345,8 @@ public class InsoleActivity extends AppCompatActivity {
                 left_insole_device_interface.setListeners(message -> onMessageReceived(message), this::onMessageSent, this::onError);
                 left_insole_device_interface.stopInsole();
                 is_L_insole_connected = true;
-                Toast.makeText(getApplication(), "Connected to Left Insole.", Toast.LENGTH_SHORT).show();
+                leftBtn.setText("開始偵測");
+                //Toast.makeText(getApplication(), "Connected to Left Insole.", Toast.LENGTH_SHORT).show();
             }
             private void onMessageReceived(String message) {
                 //store incoming bytes temporarily
@@ -400,11 +369,46 @@ public class InsoleActivity extends AppCompatActivity {
                             left_data_index++;
                         }
                     }
-                    Date date = new Date();
-                    leftDataDict.put(String.valueOf(formatter.format(date)), Arrays.toString(l_data_double_arr));
-                    if (leftDataDict.size() == 50) {
-                        sendToFirebase(leftDataDict, "Left_Insole");
+                    //Date date = new Date();
+                    leftDataDict.put(leftDataDict.size(), Arrays.toString(l_data_double_arr));
+                    if (leftDataDict.size() >= 50 && rightDataDict.size() >= 50) {
+                        //sendToFirebase(leftDataDict, "Left_Insole");
+                        Map<Integer, Object> arr = new HashMap<>();
+                        for(int i = 0; i < 50; i++)
+                            arr.put(i, leftDataDict.get(i));
+                        for(int i = 0; i < 50; i++)
+                            arr.put(i + 50, rightDataDict.get(i));
+
+                        Call<ResponseBody> call = herokuService.test(arr);
+                        call.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                Log.v("upload", "success");
+                                try {
+                                    String str = new String(response.body().bytes());
+                                    Log.v("upload res", str);
+                                    if(Float.parseFloat(str) > 0.5) {
+                                        send("60\n");
+                                        toneGen1.startTone(ToneGenerator.TONE_CDMA_CALL_SIGNAL_ISDN_INTERGROUP);
+                                        sendToFirebase(Float.parseFloat(str));
+                                    }
+                                    else {
+                                        send("s\n");
+                                        toneGen1.stopTone();
+                                        sendToFirebase(Float.parseFloat(str));
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                Log.v("upload error", t.getMessage());
+                            }
+                        });
                         leftDataDict.clear();
+                        rightDataDict.clear();
                     }
                     //if the data length reach the max_data_length, release the buffer and invert the start flag
                     if(left_data_len >= max_data_len + 16){
@@ -435,16 +439,15 @@ public class InsoleActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(stateR == 0) {
                     connectDevice(R_insole_mac);
-                    rightBtn.setText("開始偵測");
-                    toneGen1.startTone(ToneGenerator.TONE_CDMA_CALL_SIGNAL_ISDN_INTERGROUP);
+                    leftDataDict.clear();
+                    rightDataDict.clear();
                 }
                 else if(stateR == 1) {
-                    toneGen1.stopTone();
                     right_insole_device_interface.startInsole();
                     is_R_insole_started = true;
                     //startRightBtn.setText("Stop Right");
                     rightBtn.setText("結束偵測");
-                    Toast.makeText(InsoleActivity.this, "Right Insole Started.", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(InsoleActivity.this, "Right Insole Started.", Toast.LENGTH_SHORT).show();
                 }
                 else if(stateR == 2) {
                     right_insole_device_interface.stopInsole();
@@ -452,12 +455,12 @@ public class InsoleActivity extends AppCompatActivity {
                     //startRightBtn.setText("Start Right");
                     rightBtn.setText("斷開藍芽");
                     right_timer.cancel();
-                    Toast.makeText(InsoleActivity.this, "Right Insole Not Connected!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(InsoleActivity.this, "Right Insole Not Connected!", Toast.LENGTH_SHORT).show();
                 }
                 else if(stateR == 3) {
                     bluetoothManager.closeDevice(right_insole_device_interface);
                     is_R_insole_connected = false;
-                    Toast.makeText(InsoleActivity.this, "Right Insole Disconnected.", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(InsoleActivity.this, "Right Insole Disconnected.", Toast.LENGTH_SHORT).show();
                     rightBtn.setText("連線藍芽");
                 }
                 stateR++;
@@ -478,7 +481,8 @@ public class InsoleActivity extends AppCompatActivity {
                 right_insole_device_interface.setListeners(message -> onMessageReceived(message), this::onMessageSent, this::onError);
                 right_insole_device_interface.stopInsole();
                 is_R_insole_connected = true;
-                Toast.makeText(getApplication(), "Connected to Right Insole.", Toast.LENGTH_SHORT).show();
+                rightBtn.setText("開始偵測");
+                //Toast.makeText(getApplication(), "Connected to Right Insole.", Toast.LENGTH_SHORT).show();
             }
             private void onMessageSent (String message) {
                 // We sent a message! Handle it here.
@@ -504,14 +508,13 @@ public class InsoleActivity extends AppCompatActivity {
                             right_data_index++;
                         }
                     }
-                    Date date = new Date();
-                    rightDataDict.put(String.valueOf(formatter.format(date)), Arrays.toString(r_data_double_arr));
-                    if (rightDataDict.size() == 2) {
+                    //Date date = new Date();
+                    rightDataDict.put(rightDataDict.size(), Arrays.toString(r_data_double_arr));
+                    /*if (rightDataDict.size() == 50) {
                         //sendToFirebase(rightDataDict, "Right_Insole");
 
                         rightDataDict.clear();
-                        onStop();
-                    }
+                    }*/
                     // if the data length reach the max_data_length, release the buffer and invert the start flag
                     if(right_data_len >= max_data_len + 16) {
                         heatMapRight.clearData();
@@ -533,9 +536,12 @@ public class InsoleActivity extends AppCompatActivity {
         });
     }
 
-    public void sendToFirebase(Map<String,Object>  data, String of_insole){
+    public void sendToFirebase(Float pred){
         Date date = new Date();
-        db.collection(identity).document(account).collection(of_insole).document(String.valueOf(formatter2.format(date))).set(data)
+        Map<String, Object> data = new HashMap<>();
+        data.put("偵測值", pred + "");
+        data.put("時間戳", String.valueOf(formatter2.format(date)));
+        db.collection(identity).document(account).collection("偵測值").document(String.valueOf(formatter2.format(date))).set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {

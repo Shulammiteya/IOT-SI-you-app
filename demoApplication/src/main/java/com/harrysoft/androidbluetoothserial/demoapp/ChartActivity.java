@@ -33,11 +33,18 @@ import java.util.List;
 
 public class ChartActivity extends AppCompatActivity {
 
+    private String account, passwd, identity, patient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_chart);
+
+        account = getIntent().getStringExtra("account");
+        passwd = getIntent().getStringExtra("passwd");
+        identity = getIntent().getStringExtra("identity");
+        patient = getIntent().getStringExtra("patient");
 
         // initialize the utilities
         Utils.init(this);
@@ -46,9 +53,9 @@ public class ChartActivity extends AppCompatActivity {
 
         ArrayList<ChartItem> list = new ArrayList<>();
 
-        list.add(new LineChartItem(generateDataLine(), getApplicationContext()));
+        list.add(new LineChartItem(generateDataLine(), getApplicationContext(), patient));
         list.add(new BarChartItem(generateDataBar(), getApplicationContext()));
-        list.add(new PieChartItem(generateDataPie(), getApplicationContext(), "簽巡太太"));
+        list.add(new PieChartItem(generateDataPie(), getApplicationContext(), patient));
 
         ChartDataAdapter cda = new ChartDataAdapter(getApplicationContext(), list);
         lv.setAdapter(cda);

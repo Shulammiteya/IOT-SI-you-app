@@ -18,6 +18,6 @@ public interface HerokuService {
     @FormUrlEncoded
     @POST("test")
     Call<ResponseBody> test(
-            @Field("data") ArrayList<String> data
+            @Field("data") Map<Integer, Object> data
     );
 }

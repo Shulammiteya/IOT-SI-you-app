@@ -28,6 +28,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,6 +72,7 @@ public class StartActivity extends AppCompatActivity {
         initial();
         btnClickEvent();
         aniGreeting();
+
     }
 
     public void findObject() {

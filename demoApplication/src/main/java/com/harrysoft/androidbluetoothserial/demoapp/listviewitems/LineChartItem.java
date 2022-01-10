@@ -6,6 +6,9 @@ import android.content.Context;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -14,19 +17,37 @@ import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.harrysoft.androidbluetoothserial.demoapp.MenuActivity;
 import com.harrysoft.androidbluetoothserial.demoapp.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LineChartItem extends ChartItem {
 
     private ViewHolder holder;
     private boolean isRunning = false;
     private Handler handler = new Handler();
+    private String name;
+    private FirebaseFirestore db;
+    private CollectionReference collectionRef;
+    private List<Float> dataList;
+    private int length;
 
     //private final Typeface mTf;
 
-    public LineChartItem(ChartData<?> cd, Context c) {
+    public LineChartItem(ChartData<?> cd, Context c, String patient) {
         super(cd);
-
+        name = patient;
+        db = FirebaseFirestore.getInstance();
+        length = 0;
+        dataList = new ArrayList<>();
         //mTf = Typeface.createFromAsset(c.getAssets(), "OpenSans-Regular.ttf");
     }
 
@@ -42,9 +63,24 @@ public class LineChartItem extends ChartItem {
     }
     private void startRun() {
         handler.postDelayed(() -> {
-            addData((int) (Math.random() * 60) + 40);
-            startRun();
-        }, 100);
+            collectionRef = db.collection("使用者").document(name).collection("偵測值");
+            collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if(task.isSuccessful())
+                        for(QueryDocumentSnapshot document : task.getResult())
+                            dataList.add( Float.parseFloat(document.getString("偵測值")) );
+                        if(length < dataList.size()) {
+                            length = dataList.size();
+                            if(((int) (dataList.get(dataList.size() - 1) * 100) + Math.random() * 10) > 100)
+                                addData((int) (dataList.get(dataList.size() - 1) * 100) - (int) (Math.random() * 10));
+                            else
+                                addData((int) (dataList.get(dataList.size() - 1) * 100) + (int) (Math.random() * 10));
+                            startRun();
+                        }
+                }
+            });
+        }, 200);
     }
 
     @Override
